@@ -1,0 +1,54 @@
+{
+  "name": "three-pointer-controls",
+  "description": "Navigate a three.js scene with pointer events",
+  "version": "0.1.0",
+  "main": "./lib/controls.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "prepublish": "npm run build",
+    "build": "coffee -co lib/ src/",
+    "checkStyle": "coffeelint src/"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/brickify/three-pointer-controls.git"
+  },
+  "keywords": [
+    "threejs",
+    "three",
+    "camera",
+    "pointer",
+    "navigation",
+    "controls"
+  ],
+  "author": "Lowfab",
+  "contributors": [
+    {
+      "name": "Adrian Sieber"
+    },
+    {
+      "name": "Arthur Silber"
+    },
+    {
+      "name": "Johannes Deselaers"
+    },
+    {
+      "name": "Stefan Neubert"
+    },
+    {
+      "name": "Yannis Kommana"
+    }
+  ],
+  "bugs": {
+    "url": "https://github.com/brickify/three-pointer-controls/issues"
+  },
+  "homepage": "https://github.com/brickify/three-pointer-controls",
+  "dependencies": {
+    "PEP": "git://github.com/brickify/PEP#0.2.4+dist"
+  },
+  "devDependencies": {
+    "coffee-script": "^1.9.1",
+    "coffeelint": "^1.9.6",
+    "coffeelint-newline-at-eof": "^0.4.1"
+  }
+}
