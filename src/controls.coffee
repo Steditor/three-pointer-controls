@@ -7,3 +7,5 @@ module.exports = (THREE) ->
 	class PointerControls
 		construct: ->
 			@conf = clone defaults
+
+			@state = STATE.NONE
