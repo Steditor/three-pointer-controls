@@ -44,7 +44,8 @@
   },
   "homepage": "https://github.com/brickify/three-pointer-controls",
   "dependencies": {
-    "PEP": "git://github.com/brickify/PEP#0.2.4+dist"
+    "PEP": "git://github.com/brickify/PEP#0.2.4+dist",
+    "clone": "^1.0.2"
   },
   "devDependencies": {
     "coffee-script": "^1.9.1",
