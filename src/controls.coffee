@@ -1,1 +1,1 @@
-{BUTTON, STATE} = require './enums.coffee'
+{BUTTON, KEY, STATE} = require './enums.coffee'
