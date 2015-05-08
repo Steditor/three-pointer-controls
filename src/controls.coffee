@@ -5,7 +5,7 @@ defaults = require './defaults'
 
 module.exports = (THREE) ->
 	class PointerControls
-		construct: ->
+		constructor: ->
 			@conf = clone defaults
 
 			@state = STATE.NONE
