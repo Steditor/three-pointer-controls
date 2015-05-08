@@ -1,6 +1,6 @@
 clone = require 'clone'
 
-{BUTTON, KEY, STATE} = require './enums.coffee'
+{BUTTON, KEY, STATE} = require './enums'
 defaults = require './defaults'
 
 module.exports = (THREE) ->
