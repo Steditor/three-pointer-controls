@@ -8,9 +8,16 @@ module.exports = (THREE) ->
 		constructor: ->
 			@conf = clone defaults
 
+			@cameras = []
 			@state = STATE.NONE
 
 			@element = undefined
+
+		control: (camera) =>
+			@cameras.push camera
+
+		listenTo: (domElement) =>
+			registerEventListeners @, domElement
 
 		onPointerDown: (event) =>
 			preventDefault event
