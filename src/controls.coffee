@@ -8,7 +8,7 @@ PanHelper = require './PanHelper'
 module.exports = (THREE) ->
 	class PointerControls
 		constructor: ->
-			@conf = clone defaults
+			@config = clone defaults
 
 			@cameras = []
 			@state = STATE.NONE
@@ -35,8 +35,8 @@ module.exports = (THREE) ->
 			preventDefault event
 
 			switch event.buttons
-				when @conf.pan.button
-					return unless @conf.pan.enabled
+				when @config.pan.button
+					return unless @config.pan.enabled
 					@state = STATE.PAN
 					@start.set event.clientX, event.clientY
 				else
