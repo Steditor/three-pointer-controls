@@ -4,10 +4,10 @@
   "version": "0.1.0",
   "main": "./lib/controls.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "npm build && coffee -c ./test/test.coffee && beefy test/test.js",
     "prepublish": "npm run build",
     "build": "coffee -co lib/ src/",
-    "checkStyle": "coffeelint src/"
+    "checkStyle": "coffeelint src/ test/"
   },
   "repository": {
     "type": "git",
@@ -48,8 +48,12 @@
     "clone": "^1.0.2"
   },
   "devDependencies": {
+    "beefy": "^2.1.5",
+    "browserify": "^10.1.1",
+    "canvas-testbed": "^1.0.3",
     "coffee-script": "^1.9.1",
     "coffeelint": "^1.9.6",
-    "coffeelint-newline-at-eof": "^0.4.1"
+    "coffeelint-newline-at-eof": "^0.4.1",
+    "three": "^0.71.0"
   }
 }
