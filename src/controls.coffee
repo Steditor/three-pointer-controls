@@ -39,8 +39,8 @@ module.exports = (THREE) ->
 					return unless @conf.pan.enabled
 					@state = STATE.PAN
 					@start.set event.clientX, event.clientY
-
-			return if @state is STATE.NONE
+				else
+					return
 
 			@element = event.target
 			document.addEventListener 'pointermove', @onPointerMove
@@ -56,8 +56,10 @@ module.exports = (THREE) ->
 					@delta.subVectors @end, @start
 					PanHelper.pan(this).by @delta
 					@start.copy @end
+				else
+					return
 
-			@update() if @state isnt STATE.NONE
+			@update()
 			return
 
 		onPointerUp: (event) =>
