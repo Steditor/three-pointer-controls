@@ -1,4 +1,5 @@
 clone = require 'clone'
+addWheelListener = require 'wheel'
 
 {BUTTON, KEY, STATE} = require './enums'
 defaults = require './defaults'
@@ -81,6 +82,12 @@ module.exports = (THREE) ->
 			@state = STATE.NONE
 			return
 
+		onMouseWheel: (event) =>
+			preventDefault event
+			DollyHelper.dolly(this).by event.deltaY
+			@update()
+			return
+
 		update: =>
 			@offset.copy(@cameras[0].position).sub @target
 
@@ -104,4 +111,5 @@ preventDefault = (event) ->
 registerEventListeners = (controls, domElement) ->
 	domElement.addEventListener 'contextmenu', preventDefault
 	domElement.addEventListener 'pointerdown', controls.onPointerDown
+	addWheelListener domElement, controls.onMouseWheel
 	return

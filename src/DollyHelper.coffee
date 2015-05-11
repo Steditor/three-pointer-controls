@@ -6,5 +6,15 @@ dolly = (controls, distance) ->
 		controls.dolly *= (1 + distanceFraction) * controls.config.dolly.scale
 	return
 
+scroll = (controls, delta) ->
+	if delta < 0
+		controls.dolly *= controls.config.dolly.scrollScale
+	else
+		controls.dolly /= controls.config.dolly.scrollScale
+
 module.exports = dolly: (controls) ->
-	return by: ({y}) -> dolly controls, y
+	return by: ({y}) ->
+		if y
+			dolly controls, y
+		else
+			scroll controls, arguments[0]

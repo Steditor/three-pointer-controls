@@ -7,6 +7,7 @@ module.exports =
 		enabled: true
 		button: BUTTON.MIDDLE
 		scale: 1.0
+		scrollScale: 0.95
 		minDistance: 0
 		maxDistance: Infinity
 
