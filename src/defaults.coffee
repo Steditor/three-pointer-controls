@@ -6,7 +6,7 @@ module.exports =
 	dolly:
 		enabled: true
 		button: BUTTON.MIDDLE
-		scale: 0.95
+		scale: 1.0
 		minDistance: 0
 		maxDistance: Infinity
 

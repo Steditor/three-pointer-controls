@@ -4,6 +4,7 @@ clone = require 'clone'
 defaults = require './defaults'
 
 PanHelper = require './PanHelper'
+DollyHelper = require './DollyHelper'
 
 module.exports = (THREE) ->
 	class PointerControls
@@ -20,6 +21,7 @@ module.exports = (THREE) ->
 
 			@target = new THREE.Vector3()
 			@pan = new THREE.Vector3()
+			@dolly = 1
 
 			@element = undefined
 
@@ -39,6 +41,10 @@ module.exports = (THREE) ->
 					return unless @config.pan.enabled
 					@state = STATE.PAN
 					@start.set event.clientX, event.clientY
+				when @config.dolly.button
+					return unless @config.dolly.enabled
+					@state = STATE.DOLLY
+					@start.set event.clientX, event.clientY
 				else
 					return
 
@@ -55,6 +61,11 @@ module.exports = (THREE) ->
 					@end.set event.clientX, event.clientY
 					@delta.subVectors @end, @start
 					PanHelper.pan(this).by @delta
+					@start.copy @end
+				when STATE.DOLLY
+					@end.set event.clientX, event.clientY
+					@delta.subVectors @end, @start
+					DollyHelper.dolly(this).by @delta
 					@start.copy @end
 				else
 					return
@@ -75,6 +86,9 @@ module.exports = (THREE) ->
 
 			@target.add @pan
 			@pan.set 0, 0, 0
+
+			@offset.multiplyScalar @dolly
+			@dolly = 1
 
 			for camera in @cameras
 				camera.position.copy(@target).add @offset
