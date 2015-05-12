@@ -38,6 +38,7 @@ module.exports = (THREE) ->
 			return
 
 		onPointerDown: (event) =>
+			return unless @config.enabled
 			preventDefault event
 
 			switch event.buttons
