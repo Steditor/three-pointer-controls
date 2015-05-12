@@ -5,7 +5,7 @@ addWheelListener = require 'wheel'
 defaults = require './defaults'
 
 PanHelper = require './Pan'
-DollyHelper = require './Dolly'
+Dolly = require './Dolly'
 OrbitHelper = require './Orbit'
 
 module.exports = (THREE) ->
@@ -23,7 +23,7 @@ module.exports = (THREE) ->
 			@offset = new THREE.Vector3()
 
 			@panDelta = new THREE.Vector3()
-			@dolly = 1
+			@dolly = new Dolly @
 			@yawDelta = 0
 			@pitchDelta = 0
 
@@ -77,7 +77,7 @@ module.exports = (THREE) ->
 				when STATE.DOLLY
 					@end.set event.clientX, event.clientY
 					@delta.subVectors @end, @start
-					DollyHelper.dolly(this).by @delta
+					@dolly.dollyBy @delta
 					@start.copy @end
 				when STATE.ORBIT
 					@end.set event.clientX, event.clientY
@@ -100,7 +100,7 @@ module.exports = (THREE) ->
 
 		onMouseWheel: (event) =>
 			preventDefault event
-			DollyHelper.dolly(this).by event.deltaY
+			@dolly.scrollBy event.deltaY
 			@update()
 			return
 
@@ -108,7 +108,7 @@ module.exports = (THREE) ->
 			@offset.copy(@cameras[0].position).sub @target
 
 			PanHelper.update this
-			radius = DollyHelper.update this
+			radius = @dolly.update @offset
 			{yaw, pitch} = OrbitHelper.update this
 
 			@offset.x = radius * Math.sin(pitch) * Math.sin(yaw)

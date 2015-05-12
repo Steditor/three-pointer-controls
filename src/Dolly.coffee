@@ -1,30 +1,30 @@
-dolly = (controls, distance) ->
-	distanceFraction = distance / controls.element.clientHeight
-	if distance < 0
-		controls.dolly /= (1 - distanceFraction) * controls.config.dolly.scale
-	else
-		controls.dolly *= (1 + distanceFraction) * controls.config.dolly.scale
-	return
+clamp = require 'clamp'
 
-scroll = (controls, delta) ->
-	if delta < 0
-		controls.dolly *= controls.config.dolly.scrollScale
-	else
-		controls.dolly /= controls.config.dolly.scrollScale
+class Dolly
+	constructor: (@controls) ->
+		@dolly = 1
 
-update = (controls) ->
-	config = controls.config.dolly
-	radius = controls.offset.length() * controls.dolly
-	radius = Math.min config.maxDistance, radius
-	radius = Math.max config.minDistance, radius
-	controls.dolly = 1
-	return radius
+	getConfig: =>
+		return @controls.config.dolly
 
-module.exports =
-	dolly: (controls) ->
-		return by: ({y}) ->
-			if y
-				dolly controls, y
-			else
-				scroll controls, arguments[0]
-	update: update
+	dollyBy: ({y}) =>
+		distanceFraction = y / @controls.element.clientHeight
+		if y < 0
+			@dolly /= (1 - distanceFraction) * @getConfig().scale
+		else
+			@dolly *= (1 + distanceFraction) * @getConfig().scale
+		return
+
+	scrollBy: (delta) =>
+		if delta < 0
+			@dolly *= @getConfig().scrollScale
+		else
+			@dolly /= @getConfig().scrollScale
+
+	update: (oldOffset) =>
+		radius = oldOffset.length() * @dolly
+		radius = clamp radius, @getConfig().minDistance, @getConfig().maxDistance
+		@dolly = 1
+		return radius
+
+module.exports = Dolly
