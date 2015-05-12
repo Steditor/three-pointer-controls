@@ -24,8 +24,11 @@ module.exports = (THREE) ->
 
 			@pan = new THREE.Vector3()
 			@dolly = 1
-			@phiDelta = 0
-			@thetaDelta = 0
+			@yawDelta = 0
+			@pitchDelta = 0
+
+			@totalYawDelta = 0
+			@totalPitchDelta = 0
 
 			@element = undefined
 
@@ -38,6 +41,7 @@ module.exports = (THREE) ->
 			return
 
 		onPointerDown: (event) =>
+			return unless @config.enabled
 			preventDefault event
 
 			switch event.buttons
@@ -104,25 +108,35 @@ module.exports = (THREE) ->
 			@offset.copy(@cameras[0].position).sub @target
 
 			radius = @offset.length() * @dolly
+			radius = Math.min @config.dolly.maxDistance, radius
+			radius = Math.max @config.dolly.minDistance, radius
 
 			# rotation around y
-			phi = Math.atan2 @offset.x, @offset.z
-			phi += @phiDelta
+			yaw = Math.atan2 @offset.x, @offset.z
+			@yawDelta = Math.min @config.orbit.maxYaw - @totalYawDelta, @yawDelta
+			@yawDelta = Math.max @config.orbit.minYaw - @totalYawDelta, @yawDelta
+			@totalYawDelta += @yawDelta
+			yaw += @yawDelta
 
 			# rotation around x'
 			zDash = Math.sqrt @offset.x * @offset.x + @offset.z * @offset.z
-			theta = Math.atan2 zDash, @offset.y
-			theta += @thetaDelta
+			pitch = Math.atan2 zDash, @offset.y
+			@pitchDelta = Math.min @config.orbit.maxPitch - @totalPitchDelta,
+				@pitchDelta
+			@pitchDelta = Math.max @config.orbit.minPitch - @totalPitchDelta,
+				@pitchDelta
+			@totalPitchDelta += @pitchDelta
+			pitch += @pitchDelta
 
 			@target.add @pan
-			@offset.x = radius * Math.sin(theta) * Math.sin(phi)
-			@offset.y = radius * Math.cos(theta)
-			@offset.z = radius * Math.sin(theta) * Math.cos(phi)
+			@offset.x = radius * Math.sin(pitch) * Math.sin(yaw)
+			@offset.y = radius * Math.cos(pitch)
+			@offset.z = radius * Math.sin(pitch) * Math.cos(yaw)
 
 			@pan.set 0, 0, 0
 			@dolly = 1
-			@phiDelta = 0
-			@thetaDelta = 0
+			@yawDelta = 0
+			@pitchDelta = 0
 
 			for camera in @cameras
 				camera.position.copy(@target).add @offset

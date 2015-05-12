@@ -5,10 +5,10 @@ orbit = (controls, deltaX, deltaY) ->
 	orbitUp controls, factor * deltaY / element.clientHeight
 
 orbitLeft = (controls, angle) ->
-	controls.phiDelta -= angle
+	controls.yawDelta -= angle
 
 orbitUp = (controls, angle) ->
-	controls.thetaDelta -= angle
+	controls.pitchDelta -= angle
 
 module.exports = orbit: (controls) ->
 	return by: ({x, y}) -> orbit controls, x, y
