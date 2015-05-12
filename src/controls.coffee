@@ -103,9 +103,22 @@ module.exports = (THREE) ->
 		update: =>
 			@offset.copy(@cameras[0].position).sub @target
 
-			@target.add @pan
+			radius = @offset.length() * @dolly
 
-			@offset.multiplyScalar @dolly
+			# rotation around y
+			phi = Math.atan2 @offset.x, @offset.z
+			phi += @phiDelta
+
+			# rotation around x'
+			zDash = Math.sqrt @offset.x * @offset.x + @offset.z * @offset.z
+			theta = Math.atan2 zDash, @offset.y
+			theta += @thetaDelta
+
+			@target.add @pan
+			@offset.x = radius * Math.sin(theta) * Math.sin(phi)
+			@offset.y = radius * Math.cos(theta)
+			@offset.z = radius * Math.sin(theta) * Math.cos(phi)
+
 			@pan.set 0, 0, 0
 			@dolly = 1
 			@phiDelta = 0
