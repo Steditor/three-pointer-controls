@@ -4,9 +4,9 @@ addWheelListener = require 'wheel'
 {BUTTON, KEY, STATE} = require './enums'
 defaults = require './defaults'
 
-PanHelper = require './PanHelper'
-DollyHelper = require './DollyHelper'
-OrbitHelper = require './OrbitHelper'
+PanHelper = require './Pan'
+DollyHelper = require './Dolly'
+OrbitHelper = require './Orbit'
 
 module.exports = (THREE) ->
 	class PointerControls
