@@ -6,6 +6,7 @@ defaults = require './defaults'
 
 PanHelper = require './PanHelper'
 DollyHelper = require './DollyHelper'
+OrbitHelper = require './OrbitHelper'
 
 module.exports = (THREE) ->
 	class PointerControls
@@ -23,6 +24,8 @@ module.exports = (THREE) ->
 
 			@pan = new THREE.Vector3()
 			@dolly = 1
+			@phiDelta = 0
+			@thetaDelta = 0
 
 			@element = undefined
 
@@ -46,6 +49,10 @@ module.exports = (THREE) ->
 					return unless @config.dolly.enabled
 					@state = STATE.DOLLY
 					@start.set event.clientX, event.clientY
+				when @config.orbit.button
+					return unless @config.orbit.enabled
+					@state = STATE.ORBIT
+					@start.set event.clientX, event.clientY
 				else
 					return
 
@@ -67,6 +74,11 @@ module.exports = (THREE) ->
 					@end.set event.clientX, event.clientY
 					@delta.subVectors @end, @start
 					DollyHelper.dolly(this).by @delta
+					@start.copy @end
+				when STATE.ORBIT
+					@end.set event.clientX, event.clientY
+					@delta.subVectors @end, @start
+					OrbitHelper.orbit(this).by @delta
 					@start.copy @end
 				else
 					return
@@ -96,6 +108,8 @@ module.exports = (THREE) ->
 			@offset.multiplyScalar @dolly
 			@pan.set 0, 0, 0
 			@dolly = 1
+			@phiDelta = 0
+			@thetaDelta = 0
 
 			for camera in @cameras
 				camera.position.copy(@target).add @offset
