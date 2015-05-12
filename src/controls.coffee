@@ -108,9 +108,10 @@ module.exports = (THREE) ->
 			@offset
 				.copy @orbit.update @offset
 				.multiplyScalar newRadius
+			position = @target.clone().add @offset
 
 			for camera in @cameras
-				camera.position.copy(@target).add @offset
+				camera.position.copy position
 				camera.lookAt @target
 			return
 
