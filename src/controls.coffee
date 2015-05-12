@@ -4,7 +4,7 @@ addWheelListener = require 'wheel'
 {BUTTON, KEY, STATE} = require './enums'
 defaults = require './defaults'
 
-PanHelper = require './Pan'
+Pan = require './Pan'
 Dolly = require './Dolly'
 OrbitHelper = require './Orbit'
 
@@ -22,7 +22,7 @@ module.exports = (THREE) ->
 			@delta = new THREE.Vector2()
 			@offset = new THREE.Vector3()
 
-			@panDelta = new THREE.Vector3()
+			@pan = new Pan @
 			@dolly = new Dolly @
 			@yawDelta = 0
 			@pitchDelta = 0
@@ -72,7 +72,7 @@ module.exports = (THREE) ->
 				when STATE.PAN
 					@end.set event.clientX, event.clientY
 					@delta.subVectors @end, @start
-					PanHelper.pan(this).by @delta
+					@pan.panBy @delta
 					@start.copy @end
 				when STATE.DOLLY
 					@end.set event.clientX, event.clientY
@@ -107,7 +107,8 @@ module.exports = (THREE) ->
 		update: =>
 			@offset.copy(@cameras[0].position).sub @target
 
-			PanHelper.update this
+			{x, y, z} = @pan.update @target
+			@target.set x, y, z
 			radius = @dolly.update @offset
 			{yaw, pitch} = OrbitHelper.update this
 
