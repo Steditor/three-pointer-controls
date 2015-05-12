@@ -19,10 +19,10 @@ module.exports =
 			enabled: false
 			speed: 2.0
 		limits:
-			polarMin: 0
-			polarMax: Math.PI
-			azimuthMin: -Infinity
-			azimuthMax: Infinity
+			yawMin: -Infinity
+			yawMax: Infinity
+			pitchMin: 0
+			pitchMax: Math.PI
 
 	pan:
 		enabled: true
