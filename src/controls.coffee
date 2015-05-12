@@ -27,6 +27,8 @@ module.exports = (THREE) ->
 			@yawDelta = 0
 			@pitchDelta = 0
 
+			@totalYawDelta = 0
+
 			@element = undefined
 
 		control: (camera) =>
@@ -110,6 +112,9 @@ module.exports = (THREE) ->
 
 			# rotation around y
 			yaw = Math.atan2 @offset.x, @offset.z
+			@yawDelta = Math.min @config.orbit.maxYaw - @totalYawDelta, @yawDelta
+			@yawDelta = Math.max @config.orbit.minYaw - @totalYawDelta, @yawDelta
+			@totalYawDelta += @yawDelta
 			yaw += @yawDelta
 
 			# rotation around x'
