@@ -105,13 +105,15 @@ module.exports = (THREE) ->
 
 			@target.copy @pan.update @target
 			newRadius = @dolly.update @offset.length()
+			newOrbit = @orbit.update @offset, @cameras[0].up
 			@offset
-				.copy @orbit.update @offset
+				.copy newOrbit.offset
 				.multiplyScalar newRadius
 			position = @target.clone().add @offset
 
 			for camera in @cameras
 				camera.position.copy position
+				camera.up.copy newOrbit.up
 				camera.lookAt @target
 			return
 
