@@ -109,30 +109,11 @@ module.exports = (THREE) ->
 
 			PanHelper.update this
 			radius = DollyHelper.update this
-
-			# rotation around y
-			yaw = Math.atan2 @offset.x, @offset.z
-			@yawDelta = Math.min @config.orbit.maxYaw - @totalYawDelta, @yawDelta
-			@yawDelta = Math.max @config.orbit.minYaw - @totalYawDelta, @yawDelta
-			@totalYawDelta += @yawDelta
-			yaw += @yawDelta
-
-			# rotation around x'
-			zDash = Math.sqrt @offset.x * @offset.x + @offset.z * @offset.z
-			pitch = Math.atan2 zDash, @offset.y
-			@pitchDelta = Math.min @config.orbit.maxPitch - @totalPitchDelta,
-				@pitchDelta
-			@pitchDelta = Math.max @config.orbit.minPitch - @totalPitchDelta,
-				@pitchDelta
-			@totalPitchDelta += @pitchDelta
-			pitch += @pitchDelta
+			{yaw, pitch} = OrbitHelper.update this
 
 			@offset.x = radius * Math.sin(pitch) * Math.sin(yaw)
 			@offset.y = radius * Math.cos(pitch)
 			@offset.z = radius * Math.sin(pitch) * Math.cos(yaw)
-
-			@yawDelta = 0
-			@pitchDelta = 0
 
 			for camera in @cameras
 				camera.position.copy(@target).add @offset
