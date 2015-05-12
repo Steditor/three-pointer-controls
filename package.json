@@ -46,7 +46,7 @@
   "dependencies": {
     "PEP": "git://github.com/brickify/PEP#0.2.4+dist",
     "clone": "^1.0.2",
-    "wheel": "git://github.com/brickify/wheel"
+    "wheel": "0.0.1"
   },
   "devDependencies": {
     "beefy": "^2.1.5",
