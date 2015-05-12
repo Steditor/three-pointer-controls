@@ -18,11 +18,10 @@ module.exports =
 		auto:
 			enabled: false
 			speed: 2.0
-		limits:
-			yawMin: -Infinity
-			yawMax: Infinity
-			pitchMin: 0
-			pitchMax: Math.PI
+		minYaw: -Infinity
+		maxYaw: Infinity
+		minPitch: 0
+		maxPitch: Math.PI
 
 	pan:
 		enabled: true
