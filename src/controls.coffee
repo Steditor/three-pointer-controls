@@ -28,6 +28,7 @@ module.exports = (THREE) ->
 			@pitchDelta = 0
 
 			@totalYawDelta = 0
+			@totalPitchDelta = 0
 
 			@element = undefined
 
@@ -120,6 +121,11 @@ module.exports = (THREE) ->
 			# rotation around x'
 			zDash = Math.sqrt @offset.x * @offset.x + @offset.z * @offset.z
 			pitch = Math.atan2 zDash, @offset.y
+			@pitchDelta = Math.min @config.orbit.maxPitch - @totalPitchDelta,
+				@pitchDelta
+			@pitchDelta = Math.max @config.orbit.minPitch - @totalPitchDelta,
+				@pitchDelta
+			@totalPitchDelta += @pitchDelta
 			pitch += @pitchDelta
 
 			@target.add @pan
