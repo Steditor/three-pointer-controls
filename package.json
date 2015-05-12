@@ -45,6 +45,7 @@
   "homepage": "https://github.com/brickify/three-pointer-controls",
   "dependencies": {
     "PEP": "git://github.com/brickify/PEP#0.2.4+dist",
+    "clamp": "^1.0.1",
     "clone": "^1.0.2",
     "wheel": "0.0.1"
   },

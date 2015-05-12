@@ -4,9 +4,9 @@ addWheelListener = require 'wheel'
 {BUTTON, KEY, STATE} = require './enums'
 defaults = require './defaults'
 
-PanHelper = require './PanHelper'
-DollyHelper = require './DollyHelper'
-OrbitHelper = require './OrbitHelper'
+Pan = require './Pan'
+Dolly = require './Dolly'
+Orbit = require './Orbit'
 
 module.exports = (THREE) ->
 	class PointerControls
@@ -22,13 +22,9 @@ module.exports = (THREE) ->
 			@delta = new THREE.Vector2()
 			@offset = new THREE.Vector3()
 
-			@pan = new THREE.Vector3()
-			@dolly = 1
-			@yawDelta = 0
-			@pitchDelta = 0
-
-			@totalYawDelta = 0
-			@totalPitchDelta = 0
+			@pan = new Pan @
+			@dolly = new Dolly @
+			@orbit = new Orbit @
 
 			@element = undefined
 
@@ -72,17 +68,17 @@ module.exports = (THREE) ->
 				when STATE.PAN
 					@end.set event.clientX, event.clientY
 					@delta.subVectors @end, @start
-					PanHelper.pan(this).by @delta
+					@pan.panBy @delta
 					@start.copy @end
 				when STATE.DOLLY
 					@end.set event.clientX, event.clientY
 					@delta.subVectors @end, @start
-					DollyHelper.dolly(this).by @delta
+					@dolly.dollyBy @delta
 					@start.copy @end
 				when STATE.ORBIT
 					@end.set event.clientX, event.clientY
 					@delta.subVectors @end, @start
-					OrbitHelper.orbit(this).by @delta
+					@orbit.orbitBy @delta
 					@start.copy @end
 				else
 					return
@@ -100,46 +96,22 @@ module.exports = (THREE) ->
 
 		onMouseWheel: (event) =>
 			preventDefault event
-			DollyHelper.dolly(this).by event.deltaY
+			@dolly.scrollBy event.deltaY
 			@update()
 			return
 
 		update: =>
 			@offset.copy(@cameras[0].position).sub @target
 
-			radius = @offset.length() * @dolly
-			radius = Math.min @config.dolly.maxDistance, radius
-			radius = Math.max @config.dolly.minDistance, radius
-
-			# rotation around y
-			yaw = Math.atan2 @offset.x, @offset.z
-			@yawDelta = Math.min @config.orbit.maxYaw - @totalYawDelta, @yawDelta
-			@yawDelta = Math.max @config.orbit.minYaw - @totalYawDelta, @yawDelta
-			@totalYawDelta += @yawDelta
-			yaw += @yawDelta
-
-			# rotation around x'
-			zDash = Math.sqrt @offset.x * @offset.x + @offset.z * @offset.z
-			pitch = Math.atan2 zDash, @offset.y
-			@pitchDelta = Math.min @config.orbit.maxPitch - @totalPitchDelta,
-				@pitchDelta
-			@pitchDelta = Math.max @config.orbit.minPitch - @totalPitchDelta,
-				@pitchDelta
-			@totalPitchDelta += @pitchDelta
-			pitch += @pitchDelta
-
-			@target.add @pan
-			@offset.x = radius * Math.sin(pitch) * Math.sin(yaw)
-			@offset.y = radius * Math.cos(pitch)
-			@offset.z = radius * Math.sin(pitch) * Math.cos(yaw)
-
-			@pan.set 0, 0, 0
-			@dolly = 1
-			@yawDelta = 0
-			@pitchDelta = 0
+			@target.copy @pan.update @target
+			newRadius = @dolly.update @offset.length()
+			@offset
+				.copy @orbit.update @offset
+				.multiplyScalar newRadius
+			position = @target.clone().add @offset
 
 			for camera in @cameras
-				camera.position.copy(@target).add @offset
+				camera.position.copy position
 				camera.lookAt @target
 			return
 
