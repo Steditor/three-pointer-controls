@@ -1,42 +1,45 @@
-orbit = (controls, deltaX, deltaY) ->
-	element = controls.element
-	factor = 2 * Math.PI * controls.config.orbit.speed
-	orbitLeft controls, factor * deltaX / element.clientWidth
-	orbitUp controls, factor * deltaY / element.clientHeight
+clamp = require 'clamp'
 
-orbitLeft = (controls, angle) ->
-	controls.yawDelta -= angle
+class Orbit
+	constructor: (@controls) ->
+		@delta =
+			yaw: 0
+			pitch: 0
 
-orbitUp = (controls, angle) ->
-	controls.pitchDelta -= angle
+		@totalDelta =
+			yaw: 0
+			pitch: 0
 
-update = (controls) ->
-	config = controls.config.orbit
-	offset = controls.offset
+	getConfig: =>
+		return @controls.config.orbit
 
-	# rotation around y
-	yaw = Math.atan2 offset.x, offset.z
-	yawDelta = controls.yawDelta
-	yawDelta = Math.min config.maxYaw - controls.totalYawDelta, yawDelta
-	yawDelta = Math.max config.minYaw - controls.totalYawDelta, yawDelta
-	controls.totalYawDelta += controls.yawDelta
-	yaw += yawDelta
+	orbitBy: ({x, y}) =>
+		element = @controls.element
+		factor = 2 * Math.PI * @getConfig().speed
+		@delta.yaw -= factor * x / element.clientWidth
+		@delta.pitch -= factor * y / element.clientHeight
 
-	# rotation around x'
-	zDash = Math.sqrt offset.x * offset.x + offset.z * offset.z
-	pitch = Math.atan2 zDash, offset.y
-	pitchDelta = controls.pitchDelta
-	pitchDelta = Math.min config.maxPitch - controls.totalPitchDelta, pitchDelta
-	pitchDelta = Math.max config.minPitch - controls.totalPitchDelta, pitchDelta
-	controls.totalPitchDelta += pitchDelta
-	pitch += pitchDelta
+	update: (oldOffset) =>
+		# rotation around y
+		yaw = Math.atan2 oldOffset.x, oldOffset.z
+		@delta.yaw = clamp @delta.yaw,
+			@getConfig().minYaw - @totalDelta.yaw,
+			@getConfig().maxYaw - @totalDelta.yaw
+		yaw += @delta.yaw
 
-	controls.yawDelta = 0
-	controls.pitchDelta = 0
+		# rotation around x'
+		zDash = Math.sqrt oldOffset.x * oldOffset.x + oldOffset.z * oldOffset.z
+		pitch = Math.atan2 zDash, oldOffset.y
+		@delta.pitch = clamp @delta.pitch,
+			@getConfig().minPitch - @totalDelta.pitch,
+			@getConfig().maxPitch - @totalDelta.pitch
+		pitch += @delta.pitch
 
-	return {yaw, pitch}
+		@totalDelta.yaw += @delta.yaw
+		@totalDelta.pitch += @delta.pitch
+		@delta.yaw = 0
+		@delta.pitch = 0
 
-module.exports =
-	orbit: (controls) ->
-		return by: ({x, y}) -> orbit controls, x, y
-	update: update
+		return {yaw, pitch}
+
+module.exports = Orbit

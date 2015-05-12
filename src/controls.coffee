@@ -6,7 +6,7 @@ defaults = require './defaults'
 
 Pan = require './Pan'
 Dolly = require './Dolly'
-OrbitHelper = require './Orbit'
+Orbit = require './Orbit'
 
 module.exports = (THREE) ->
 	class PointerControls
@@ -24,11 +24,7 @@ module.exports = (THREE) ->
 
 			@pan = new Pan @
 			@dolly = new Dolly @
-			@yawDelta = 0
-			@pitchDelta = 0
-
-			@totalYawDelta = 0
-			@totalPitchDelta = 0
+			@orbit = new Orbit @
 
 			@element = undefined
 
@@ -82,7 +78,7 @@ module.exports = (THREE) ->
 				when STATE.ORBIT
 					@end.set event.clientX, event.clientY
 					@delta.subVectors @end, @start
-					OrbitHelper.orbit(this).by @delta
+					@orbit.orbitBy @delta
 					@start.copy @end
 				else
 					return
@@ -110,7 +106,7 @@ module.exports = (THREE) ->
 			{x, y, z} = @pan.update @target
 			@target.set x, y, z
 			radius = @dolly.update @offset
-			{yaw, pitch} = OrbitHelper.update this
+			{yaw, pitch} = @orbit.update @offset
 
 			@offset.x = radius * Math.sin(pitch) * Math.sin(yaw)
 			@offset.y = radius * Math.cos(pitch)
