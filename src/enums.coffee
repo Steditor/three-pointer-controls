@@ -15,5 +15,5 @@ module.exports.KEY =
 module.exports.STATE =
 	NONE: 0
 	PAN: 1
-	ROTATE: 2
+	ORBIT: 2
 	DOLLY: 3
