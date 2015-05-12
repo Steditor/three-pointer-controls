@@ -104,6 +104,8 @@ module.exports = (THREE) ->
 			@offset.copy(@cameras[0].position).sub @target
 
 			radius = @offset.length() * @dolly
+			radius = Math.min @config.dolly.maxDistance, radius
+			radius = Math.max @config.dolly.minDistance, radius
 
 			# rotation around y
 			phi = Math.atan2 @offset.x, @offset.z
