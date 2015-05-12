@@ -107,9 +107,7 @@ module.exports = (THREE) ->
 		update: =>
 			@offset.copy(@cameras[0].position).sub @target
 
-			radius = @offset.length() * @dolly
-			radius = Math.min @config.dolly.maxDistance, radius
-			radius = Math.max @config.dolly.minDistance, radius
+			radius = DollyHelper.update this
 
 			# rotation around y
 			yaw = Math.atan2 @offset.x, @offset.z
@@ -134,7 +132,6 @@ module.exports = (THREE) ->
 			@offset.z = radius * Math.sin(pitch) * Math.cos(yaw)
 
 			@pan.set 0, 0, 0
-			@dolly = 1
 			@yawDelta = 0
 			@pitchDelta = 0
 

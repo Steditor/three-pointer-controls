@@ -12,9 +12,19 @@ scroll = (controls, delta) ->
 	else
 		controls.dolly /= controls.config.dolly.scrollScale
 
-module.exports = dolly: (controls) ->
-	return by: ({y}) ->
-		if y
-			dolly controls, y
-		else
-			scroll controls, arguments[0]
+update = (controls) ->
+	config = controls.config.dolly
+	radius = controls.offset.length() * controls.dolly
+	radius = Math.min config.maxDistance, radius
+	radius = Math.max config.minDistance, radius
+	controls.dolly = 1
+	return radius
+
+module.exports =
+	dolly: (controls) ->
+		return by: ({y}) ->
+			if y
+				dolly controls, y
+			else
+				scroll controls, arguments[0]
+	update: update
