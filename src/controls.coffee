@@ -13,6 +13,7 @@ module.exports = (THREE) ->
 			@config = clone defaults
 
 			@cameras = []
+			@target = new THREE.Vector3()
 			@state = STATE.NONE
 
 			@start = new THREE.Vector2()
@@ -20,7 +21,6 @@ module.exports = (THREE) ->
 			@delta = new THREE.Vector2()
 			@offset = new THREE.Vector3()
 
-			@target = new THREE.Vector3()
 			@pan = new THREE.Vector3()
 			@dolly = 1
 
@@ -92,9 +92,9 @@ module.exports = (THREE) ->
 			@offset.copy(@cameras[0].position).sub @target
 
 			@target.add @pan
-			@pan.set 0, 0, 0
 
 			@offset.multiplyScalar @dolly
+			@pan.set 0, 0, 0
 			@dolly = 1
 
 			for camera in @cameras
