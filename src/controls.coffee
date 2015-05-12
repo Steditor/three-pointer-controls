@@ -22,7 +22,7 @@ module.exports = (THREE) ->
 			@delta = new THREE.Vector2()
 			@offset = new THREE.Vector3()
 
-			@pan = new THREE.Vector3()
+			@panDelta = new THREE.Vector3()
 			@dolly = 1
 			@yawDelta = 0
 			@pitchDelta = 0
@@ -107,6 +107,7 @@ module.exports = (THREE) ->
 		update: =>
 			@offset.copy(@cameras[0].position).sub @target
 
+			PanHelper.update this
 			radius = DollyHelper.update this
 
 			# rotation around y
@@ -126,12 +127,10 @@ module.exports = (THREE) ->
 			@totalPitchDelta += @pitchDelta
 			pitch += @pitchDelta
 
-			@target.add @pan
 			@offset.x = radius * Math.sin(pitch) * Math.sin(yaw)
 			@offset.y = radius * Math.cos(pitch)
 			@offset.z = radius * Math.sin(pitch) * Math.cos(yaw)
 
-			@pan.set 0, 0, 0
 			@yawDelta = 0
 			@pitchDelta = 0
 

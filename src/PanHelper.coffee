@@ -1,7 +1,7 @@
 CameraType = require './CameraType'
 
 pan = (controls, direction, distance) ->
-	controls.pan.add direction.multiplyScalar distance
+	controls.panDelta.add direction.multiplyScalar distance
 	return
 
 panLeft = (controls, distance) ->
@@ -49,8 +49,13 @@ selectPanFunction = (camera) ->
 			console.warn 'Camera type not supported'
 			return undefined
 
-module.exports = pan: (controls) ->
-	panFunction = selectPanFunction controls.cameras[0]
-	return undefined unless panFunction
+update = (controls) ->
+	controls.target.add controls.panDelta
+	controls.panDelta.set 0, 0, 0
 
-	return by: ({x, y}) -> panFunction controls, x, y
+module.exports =
+	pan: (controls) ->
+		panFunction = selectPanFunction controls.cameras[0]
+		return undefined unless panFunction
+		return by: ({x, y}) -> panFunction controls, x, y
+	update: update
