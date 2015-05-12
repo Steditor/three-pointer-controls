@@ -103,14 +103,11 @@ module.exports = (THREE) ->
 		update: =>
 			@offset.copy(@cameras[0].position).sub @target
 
-			{x, y, z} = @pan.update @target
-			@target.set x, y, z
-			radius = @dolly.update @offset
-			{yaw, pitch} = @orbit.update @offset
-
-			@offset.x = radius * Math.sin(pitch) * Math.sin(yaw)
-			@offset.y = radius * Math.cos(pitch)
-			@offset.z = radius * Math.sin(pitch) * Math.cos(yaw)
+			@target.copy @pan.update @target
+			newRadius = @dolly.update @offset.length()
+			@offset
+				.copy @orbit.update @offset
+				.multiplyScalar newRadius
 
 			for camera in @cameras
 				camera.position.copy(@target).add @offset

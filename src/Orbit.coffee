@@ -40,6 +40,10 @@ class Orbit
 		@delta.yaw = 0
 		@delta.pitch = 0
 
-		return {yaw, pitch}
+		return {
+		x: Math.sin(pitch) * Math.sin(yaw)
+		y: Math.cos(pitch)
+		z: Math.sin(pitch) * Math.cos(yaw)
+		}
 
 module.exports = Orbit

@@ -21,8 +21,8 @@ class Dolly
 		else
 			@dolly /= @getConfig().scrollScale
 
-	update: (oldOffset) =>
-		radius = oldOffset.length() * @dolly
+	update: (oldRadius) =>
+		radius = oldRadius * @dolly
 		radius = clamp radius, @getConfig().minDistance, @getConfig().maxDistance
 		@dolly = 1
 		return radius
