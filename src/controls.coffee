@@ -113,6 +113,16 @@ module.exports = (THREE) ->
 			@home.position.copy position if position
 			@home.up.copy up if up
 
+		updateCamerasTo: ({target, position, up}) =>
+			target ?= @target
+			position ?= @cameras[0].position
+			up ?= @cameras[0].up
+			for camera in @cameras
+				camera.position.copy position
+				camera.up.copy up
+				camera.lookAt target
+			return
+
 		update: =>
 			@offset.copy(@cameras[0].position).sub @target
 
@@ -124,10 +134,7 @@ module.exports = (THREE) ->
 				.multiplyScalar newRadius
 			position = @target.clone().add @offset
 
-			for camera in @cameras
-				camera.position.copy position
-				camera.up.copy newOrbit.up
-				camera.lookAt @target
+			@updateCamerasTo {@target, position, up: newOrbit.up}
 			return
 
 preventDefault = (event) ->
