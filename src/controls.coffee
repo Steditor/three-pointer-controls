@@ -13,8 +13,13 @@ module.exports = (THREE) ->
 		constructor: ->
 			@config = clone defaults
 
+			@home =
+				target: new THREE.Vector3()
+				position: undefined
+				up: undefined
 			@cameras = []
-			@target = new THREE.Vector3()
+			@target = @home.target.clone()
+
 			@state = STATE.NONE
 
 			@start = new THREE.Vector2()
@@ -30,6 +35,9 @@ module.exports = (THREE) ->
 
 		control: (camera) =>
 			@cameras.push camera
+			@home.position ?= camera.position.clone()
+			@home.up ?= camera.up
+			@update() # update to enforce limits
 			return
 
 		listenTo: (domElement) =>
@@ -100,21 +108,46 @@ module.exports = (THREE) ->
 			@update()
 			return
 
-		update: =>
-			@offset.copy(@cameras[0].position).sub @target
+		setHome: ({target, position, up}) =>
+			@home.target.copy target if target
+			@home.position.copy position if position
+			@home.up.copy up if up
+			return
 
-			@target.copy @pan.update @target
-			newRadius = @dolly.update @offset.length()
-			newOrbit = @orbit.update @offset, @cameras[0].up
-			@offset
-				.copy newOrbit.offset
-				.multiplyScalar newRadius
-			position = @target.clone().add @offset
+		reset: =>
+			@set @home
+			return
+
+		set: ({target, position, offset, up}) =>
+			@pan.reset()
+			@dolly.reset()
+			@orbit.reset()
+			@updateCamerasTo arguments...
+			return
+
+		updateCamerasTo: ({target, position, offset, up}) =>
+			@target.copy target if target
+			position ?= @target.clone().add offset if offset
+			position ?= @cameras[0].position
+			up ?= @cameras[0].up
 
 			for camera in @cameras
 				camera.position.copy position
-				camera.up.copy newOrbit.up
+				camera.up.copy up
 				camera.lookAt @target
+			return
+
+		update: =>
+			@offset.copy(@cameras[0].position).sub @target
+
+			target = @pan.update @target
+			radius = @dolly.update @offset.length()
+			{offset, up} = @orbit.update @offset, @cameras[0].up
+			@offset
+				.copy offset
+				.multiplyScalar radius
+
+			@updateCamerasTo {target, @offset, up}
 			return
 
 preventDefault = (event) ->

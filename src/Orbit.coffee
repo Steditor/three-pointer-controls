@@ -2,9 +2,13 @@ clamp = require 'clamp'
 
 class Orbit
 	constructor: (@controls) ->
+		@reset()
+
+	reset: =>
 		@delta =
 			yaw: 0
 			pitch: 0
+		@totalDelta = undefined
 
 	getConfig: =>
 		return @controls.config.orbit
