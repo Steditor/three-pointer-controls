@@ -35,6 +35,8 @@ module.exports = (THREE) ->
 
 		control: (camera) =>
 			@cameras.push camera
+			@home.position ?= camera.position.clone()
+			@home.up ?= camera.up
 			@update() # update to enforce limits
 			return
 
