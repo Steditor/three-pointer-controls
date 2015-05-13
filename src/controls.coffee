@@ -122,10 +122,12 @@ module.exports = (THREE) ->
 			@updateCamerasTo {@target, position: @home.position, up: @home.up}
 			return
 
-		updateCamerasTo: ({target, position, up}) =>
-			@target = target || @target
+		updateCamerasTo: ({target, position, offset, up}) =>
+			@target.copy target if target
+			position ?= @target.clone().add offset if offset
 			position ?= @cameras[0].position
 			up ?= @cameras[0].up
+
 			for camera in @cameras
 				camera.position.copy position
 				camera.up.copy up
