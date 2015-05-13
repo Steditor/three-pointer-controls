@@ -30,6 +30,7 @@ module.exports = (THREE) ->
 
 		control: (camera) =>
 			@cameras.push camera
+			@update() # update to enforce limits
 			return
 
 		listenTo: (domElement) =>
