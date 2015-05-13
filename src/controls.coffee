@@ -123,13 +123,13 @@ module.exports = (THREE) ->
 			return
 
 		updateCamerasTo: ({target, position, up}) =>
-			target ?= @target
+			@target = target || @target
 			position ?= @cameras[0].position
 			up ?= @cameras[0].up
 			for camera in @cameras
 				camera.position.copy position
 				camera.up.copy up
-				camera.lookAt target
+				camera.lookAt @target
 			return
 
 		update: =>
