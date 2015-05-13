@@ -2,6 +2,9 @@ clamp = require 'clamp'
 
 class Dolly
 	constructor: (@controls) ->
+		@reset()
+
+	reset: =>
 		@dolly = 1
 
 	getConfig: =>

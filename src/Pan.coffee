@@ -2,6 +2,9 @@ CameraType = require './CameraType'
 
 class Pan
 	constructor: (@controls) ->
+		@reset()
+
+	reset: =>
 		@delta =
 			x: 0
 			y: 0
