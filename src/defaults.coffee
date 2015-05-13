@@ -20,8 +20,8 @@ module.exports =
 			speed: 2.0
 		minYaw: -Infinity
 		maxYaw: Infinity
-		minPitch: -Infinity
-		maxPitch: Infinity
+		minPitch: -Math.PI / 2
+		maxPitch: Math.PI / 2
 
 	pan:
 		enabled: true
