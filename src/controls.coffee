@@ -137,15 +137,14 @@ module.exports = (THREE) ->
 		update: =>
 			@offset.copy(@cameras[0].position).sub @target
 
-			@target.copy @pan.update @target
-			newRadius = @dolly.update @offset.length()
-			newOrbit = @orbit.update @offset, @cameras[0].up
+			target = @pan.update @target
+			radius = @dolly.update @offset.length()
+			{offset, up} = @orbit.update @offset, @cameras[0].up
 			@offset
-				.copy newOrbit.offset
-				.multiplyScalar newRadius
-			position = @target.clone().add @offset
+				.copy offset
+				.multiplyScalar radius
 
-			@updateCamerasTo {@target, position, up: newOrbit.up}
+			@updateCamerasTo {target, @offset, up}
 			return
 
 preventDefault = (event) ->
