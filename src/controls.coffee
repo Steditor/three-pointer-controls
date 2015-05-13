@@ -112,6 +112,15 @@ module.exports = (THREE) ->
 			@home.target.copy target if target
 			@home.position.copy position if position
 			@home.up.copy up if up
+			return
+
+		reset: =>
+			@pan.reset()
+			@dolly.reset()
+			@orbit.reset()
+			@target.copy @home.target
+			@updateCamerasTo {@target, position: @home.position, up: @home.up}
+			return
 
 		updateCamerasTo: ({target, position, up}) =>
 			target ?= @target
