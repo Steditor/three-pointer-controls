@@ -5,7 +5,7 @@ Navigate a three.js scene with [pointer events](http://www.w3.org/TR/pointereven
 This is an implementation of orbit controls inspired by
 [three-orbit-controls](https://www.npmjs.com/package/three-orbit-controls)
 but with [pointer events](http://www.w3.org/TR/pointerevents) instead of
-mouse events. See [test](#Testing) for an example.
+mouse events. See [test](#testing) for an example.
 
 ## Usage
 
