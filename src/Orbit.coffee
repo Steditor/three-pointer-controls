@@ -6,10 +6,6 @@ class Orbit
 			yaw: 0
 			pitch: 0
 
-		@totalDelta =
-			yaw: 0
-			pitch: 0
-
 	getConfig: =>
 		return @controls.config.orbit
 
@@ -31,6 +27,8 @@ class Orbit
 
 	update: (oldOffset, oldUp) =>
 		{yaw, pitch} = @getPoseFrom oldOffset, oldUp
+
+		@totalDelta ?= {yaw, pitch}
 
 		# rotation around y
 		@delta.yaw = clamp @delta.yaw,
