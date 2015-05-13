@@ -19,22 +19,27 @@ class Orbit
 		@delta.yaw -= factor * x / element.clientWidth
 		@delta.pitch += factor * y / element.clientHeight
 
+	getPoseFrom: (offset, up) ->
+		yaw = Math.atan2 offset.x, offset.z # angle in rad relative to +z axis
+		yaw += Math.PI if up.y < 0
+
+		zDash = Math.sqrt offset.x * offset.x + offset.z * offset.z
+		zDash *= -1 if up.y < 0
+		pitch = Math.atan2 offset.y, zDash # angle in rad relative to +z' axis
+
+		return {yaw, pitch}
+
 	update: (oldOffset, oldUp) =>
+		{yaw, pitch} = @getPoseFrom oldOffset, oldUp
+
 		# rotation around y
-		yaw = Math.atan2 oldOffset.x, oldOffset.z # angle in rad relative to +z axis
 		@delta.yaw = clamp @delta.yaw,
 			@getConfig().minYaw - @totalDelta.yaw,
 			@getConfig().maxYaw - @totalDelta.yaw
-		if oldUp.y < 0
-			yaw += Math.PI
 		yaw += @delta.yaw
 		yaw %= 2 * Math.PI
 
 		# rotation around x'
-		zDash = Math.sqrt oldOffset.x * oldOffset.x + oldOffset.z * oldOffset.z
-		if oldUp.y < 0
-			zDash *= -1
-		pitch = Math.atan2 oldOffset.y, zDash # angle in rad relative to +z' axis
 		@delta.pitch = clamp @delta.pitch,
 			@getConfig().minPitch - @totalDelta.pitch,
 			@getConfig().maxPitch - @totalDelta.pitch
