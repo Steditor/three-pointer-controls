@@ -108,6 +108,11 @@ module.exports = (THREE) ->
 			@update()
 			return
 
+		setHome: ({target, position, up}) =>
+			@home.target.copy target if target
+			@home.position.copy position if position
+			@home.up.copy up if up
+
 		update: =>
 			@offset.copy(@cameras[0].position).sub @target
 
