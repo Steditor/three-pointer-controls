@@ -115,11 +115,14 @@ module.exports = (THREE) ->
 			return
 
 		reset: =>
+			@set @home
+			return
+
+		set: ({target, position, offset, up}) =>
 			@pan.reset()
 			@dolly.reset()
 			@orbit.reset()
-			@target.copy @home.target
-			@updateCamerasTo {@target, position: @home.position, up: @home.up}
+			@updateCamerasTo arguments...
 			return
 
 		updateCamerasTo: ({target, position, offset, up}) =>
