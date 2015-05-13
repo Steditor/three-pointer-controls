@@ -1,6 +1,7 @@
 {
   "name": "three-pointer-controls",
   "description": "Navigate a three.js scene with pointer events",
+  "license": "MIT",
   "version": "0.1.0",
   "main": "./lib/controls.js",
   "scripts": {
@@ -21,7 +22,7 @@
     "navigation",
     "controls"
   ],
-  "author": "Lowfab",
+  "author": "Stefan Neubert",
   "contributors": [
     {
       "name": "Adrian Sieber"
