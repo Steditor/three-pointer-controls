@@ -13,8 +13,13 @@ module.exports = (THREE) ->
 		constructor: ->
 			@config = clone defaults
 
+			@home =
+				target: new THREE.Vector3()
+				position: undefined
+				up: undefined
 			@cameras = []
-			@target = new THREE.Vector3()
+			@target = @home.target.clone()
+
 			@state = STATE.NONE
 
 			@start = new THREE.Vector2()
