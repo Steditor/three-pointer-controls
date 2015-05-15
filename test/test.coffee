@@ -34,8 +34,7 @@ start = (gl, width, height) ->
 	camera.lookAt new THREE.Vector3()
 
 	controls = new PointerControls()
-	controls.control camera
-	controls.listenTo document
+	controls.control(camera).with(document)
 
 	#addCube scene
 	addAxis scene, 0xff0000, new THREE.Vector3 1, 0, 0
