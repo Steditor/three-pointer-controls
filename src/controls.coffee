@@ -38,7 +38,7 @@ module.exports = (THREE) ->
 			@home.position ?= camera.position.clone()
 			@home.up ?= camera.up
 			@update() # update to enforce limits
-			return
+			return with: @listenTo
 
 		listenTo: (domElement) =>
 			registerEventListeners @, domElement
