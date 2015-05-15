@@ -30,7 +30,7 @@ start = (gl, width, height) ->
 	camera = new THREE.PerspectiveCamera 50, width / height, 1, 1000
 	#camera = new THREE.OrthographicCamera 1 / -2, 1 / 2, 1 / 2, 1 / -2, 1, 1000
 	camera.position.set 0, 1, 3
-	camera.up.set(0, 1, 0)
+	camera.up.set 0, 1, 0
 	camera.lookAt new THREE.Vector3()
 
 	controls = new PointerControls()

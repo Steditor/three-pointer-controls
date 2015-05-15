@@ -8,6 +8,9 @@ Pan = require './Pan'
 Dolly = require './Dolly'
 Orbit = require './Orbit'
 
+# internally, pointerControls works with +y as up vector
+UP = {x: 0, y: 1, z: 0}
+
 module.exports = (THREE) ->
 	class PointerControls
 		constructor: ->
@@ -15,8 +18,10 @@ module.exports = (THREE) ->
 
 			@home =
 				target: new THREE.Vector3()
-				position: undefined
-				up: undefined
+				position: new THREE.Vector3()
+				up: new THREE.Vector3()
+				upToYp: undefined
+				ypToUp: undefined
 			@cameras = []
 			@target = @home.target.clone()
 
@@ -25,7 +30,6 @@ module.exports = (THREE) ->
 			@start = new THREE.Vector2()
 			@end = new THREE.Vector2()
 			@delta = new THREE.Vector2()
-			@offset = new THREE.Vector3()
 
 			@pan = new Pan @
 			@dolly = new Dolly @
@@ -34,9 +38,8 @@ module.exports = (THREE) ->
 			@element = undefined
 
 		control: (camera) =>
+			@setHome camera unless @cameras.length
 			@cameras.push camera
-			@home.position ?= camera.position.clone()
-			@home.up ?= camera.up
 			@update() # update to enforce limits
 			return with: @listenTo
 
@@ -112,6 +115,10 @@ module.exports = (THREE) ->
 			@home.target.copy target if target
 			@home.position.copy position if position
 			@home.up.copy up if up
+
+			@home.upToYp = new THREE.Quaternion().setFromUnitVectors @home.up, UP
+			@home.ypToUp = @home.upToYp.clone().inverse()
+
 			return
 
 		reset: =>
@@ -138,16 +145,20 @@ module.exports = (THREE) ->
 			return
 
 		update: =>
-			@offset.copy(@cameras[0].position).sub @target
+			offset = @cameras[0].position.clone().sub @target
+			offset.applyQuaternion @home.upToYp
+			up = @cameras[0].up.clone()
+			up.applyQuaternion @home.upToYp
 
 			target = @pan.update @target
-			radius = @dolly.update @offset.length()
-			{offset, up} = @orbit.update @offset, @cameras[0].up
-			@offset
-				.copy offset
-				.multiplyScalar radius
+			radius = @dolly.update offset.length()
+			{offset: o, up: u} = @orbit.update offset, up
+			offset.copy(o).multiplyScalar radius
+			up.copy u
 
-			@updateCamerasTo {target, @offset, up}
+			offset.applyQuaternion @home.ypToUp
+			up.applyQuaternion @home.ypToUp
+			@updateCamerasTo {target, offset, up}
 			return
 
 preventDefault = (event) ->
