@@ -24,6 +24,13 @@ controls.control(camera)
 controls.listenTo(domElement)
 ```
 
+or
+
+```js
+controls = new PointerControls()
+controls.control(camera).with(domElement)
+```
+
 ## Testing
 
 Clone the repository, run `npm install` and `npm test`. Then open
