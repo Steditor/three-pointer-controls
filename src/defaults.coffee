@@ -15,9 +15,6 @@ module.exports =
 		enabled: true
 		button: BUTTON.LEFT
 		speed: 1.0
-		auto:
-			enabled: false
-			speed: 2.0
 		minYaw: -Infinity
 		maxYaw: Infinity
 		minPitch: -Math.PI / 2
