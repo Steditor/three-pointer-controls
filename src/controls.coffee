@@ -7,6 +7,7 @@ defaults = require './defaults'
 Pan = require './Pan'
 Dolly = require './Dolly'
 Orbit = require './Orbit'
+Animation = require './animation/Animation'
 
 # internally, pointerControls works with +y as up vector
 UP = {x: 0, y: 1, z: 0}
@@ -34,6 +35,7 @@ module.exports = (THREE) ->
 			@pan = new Pan @
 			@dolly = new Dolly @
 			@orbit = new Orbit @
+			@animation = new Animation @
 
 			@element = undefined
 

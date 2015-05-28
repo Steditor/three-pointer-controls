@@ -35,6 +35,7 @@ start = (gl, width, height) ->
 
 	controls = new PointerControls()
 	controls.control(camera).with(document)
+	controls.animation.orbit yawSpeed: 0.5
 
 	#addCube scene
 	addAxis scene, 0xff0000, new THREE.Vector3 1, 0, 0
