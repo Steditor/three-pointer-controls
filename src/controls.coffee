@@ -69,6 +69,7 @@ module.exports = (THREE) ->
 				else
 					return
 
+			@animation.setStatus @config.animation.onInteraction
 			@element = event.target
 			document.addEventListener 'pointermove', @onPointerMove
 			document.addEventListener 'pointerup', @onPointerUp
@@ -96,11 +97,13 @@ module.exports = (THREE) ->
 				else
 					return
 
+			@animation.setStatus @config.animation.onInteraction
 			@update()
 			return
 
 		onPointerUp: (event) =>
 			preventDefault event
+			@animation.setStatus @config.animation.onInteraction
 			document.removeEventListener 'pointermove', @onPointerMove
 			document.removeEventListener 'pointerup', @onPointerUp
 			@element = undefined
