@@ -7,6 +7,7 @@ defaults = require './defaults'
 Pan = require './Pan'
 Dolly = require './Dolly'
 Orbit = require './Orbit'
+Animation = require './animation/Animation'
 
 # internally, pointerControls works with +y as up vector
 UP = {x: 0, y: 1, z: 0}
@@ -34,6 +35,7 @@ module.exports = (THREE) ->
 			@pan = new Pan @
 			@dolly = new Dolly @
 			@orbit = new Orbit @
+			@animation = new Animation @
 
 			@element = undefined
 
@@ -67,6 +69,7 @@ module.exports = (THREE) ->
 				else
 					return
 
+			@animation.setStatus @config.animation.onInteraction
 			@element = event.target
 			document.addEventListener 'pointermove', @onPointerMove
 			document.addEventListener 'pointerup', @onPointerUp
@@ -94,11 +97,13 @@ module.exports = (THREE) ->
 				else
 					return
 
+			@animation.setStatus @config.animation.onInteraction
 			@update()
 			return
 
 		onPointerUp: (event) =>
 			preventDefault event
+			@animation.setStatus @config.animation.onInteraction
 			document.removeEventListener 'pointermove', @onPointerMove
 			document.removeEventListener 'pointerup', @onPointerUp
 			@element = undefined

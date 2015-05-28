@@ -5,7 +5,7 @@
   "version": "0.3.0",
   "main": "./lib/controls.js",
   "scripts": {
-    "test": "npm build && coffee -c ./test/test.coffee && beefy test/test.js",
+    "test": "npm run build && coffee -c ./test/test.coffee && beefy test/test.js",
     "prepublish": "npm run build",
     "build": "coffee -co lib/ src/",
     "checkStyle": "coffeelint src/ test/"
