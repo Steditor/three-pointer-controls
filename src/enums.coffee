@@ -17,3 +17,9 @@ module.exports.STATE =
 	PAN: 1
 	ORBIT: 2
 	DOLLY: 3
+
+module.exports.ANIMATION =
+	PLAY: 0
+	PAUSE: 1
+	STOP: 2
+	DONE: 3

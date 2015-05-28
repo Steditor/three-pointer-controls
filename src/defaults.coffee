@@ -1,4 +1,4 @@
-{BUTTON, KEY} = require './enums'
+{BUTTON, KEY, ANIMATION} = require './enums'
 
 module.exports =
 	enabled: true
@@ -29,3 +29,7 @@ module.exports =
 			right: KEY.RIGHT
 			down: KEY.DOWN
 			speed: 10.0
+
+	animation:
+		onInteraction: ANIMATION.STOP
+		loop: yes
