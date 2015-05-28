@@ -1,9 +1,10 @@
+AnimationStep = require './AnimationStep'
 {ANIMATION} = require '../enums'
 
 # 360° in 1000 ms
 speedFactor = 2 * Math.PI / 1000
 
-class Orbit
+class Orbit extends AnimationStep
 	constructor: ({yawSpeed, pitchSpeed} = {}) ->
 		@yawSpeed = yawSpeed || 1
 		@pitchSpeed = pitchSpeed || 0
