@@ -31,5 +31,6 @@ module.exports =
 			speed: 10.0
 
 	animation:
+		enabled: yes
 		onInteraction: ANIMATION.STOP
 		loop: yes

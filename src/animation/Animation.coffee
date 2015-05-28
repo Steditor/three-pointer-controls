@@ -15,6 +15,11 @@ class Animation
 		@step = 0
 		@status = ANIMATION.STOP
 
+	pauseIfNotEnabled: =>
+		unless @controls.config.enabled and @controls.config.animation.enabled
+			@pause()
+		return @status
+
 	play: =>
 		return if @status is ANIMATION.PLAY
 
@@ -41,6 +46,7 @@ class Animation
 				@stop()
 
 	_loop: (timestamp) =>
+		@pauseIfNotEnabled()
 		return unless @status is ANIMATION.PLAY
 
 		@lastLoop ?= timestamp
