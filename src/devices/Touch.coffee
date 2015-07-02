@@ -1,16 +1,24 @@
 {STATE} = require '../enums'
 
+setState = ->
+	switch @touchPoints
+		when @config.dolly.touchPoints
+			return @state = STATE.DOLLY if @config.dolly.enabled
+		when @config.orbit.touchPoints
+			return @state = STATE.ORBIT if @config.orbit.enabled
+
+	return @state = STATE.NONE
+
 onPointerDown = (event) ->
 	@touchPoints ?= 0
 	@touchPoints++
 
-	switch @touchPoints
-		when @config.orbit.touch
-			@state = STATE.ORBIT
-			@start.set event.clientX, event.clientY
-		else
-			@state = STATE.NONE
-			@start.set undefined, undefined
+	setState.call @
+
+	if @state is STATE.NONE
+		@start.set undefined, undefined
+	else
+		@start.set event.clientX, event.clientY
 
 	@startInteraction event
 	return
@@ -21,6 +29,11 @@ onPointerMove = (event) ->
 		return
 
 	switch @state
+		when STATE.DOLLY
+			@end.set event.clientX, event.clientY
+			@delta.subVectors @end, @start
+			@dolly.dollyBy @delta
+			@start.copy @end
 		when STATE.ORBIT
 			@end.set event.clientX, event.clientY
 			@delta.subVectors @end, @start
@@ -35,11 +48,7 @@ onPointerMove = (event) ->
 onPointerUp = (event) ->
 	@touchPoints--
 
-	switch @touchPoints
-		when @config.orbit.touch
-			@state = STATE.ORBIT
-		else
-			@state = STATE.NONE
+	setState.call @
 
 	@start.set undefined, undefined
 
