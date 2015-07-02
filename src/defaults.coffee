@@ -6,6 +6,7 @@ module.exports =
 	dolly:
 		enabled: true
 		button: BUTTON.MIDDLE
+		touchPoints: 2
 		scale: 1.0
 		scrollScale: 0.95
 		minDistance: 0

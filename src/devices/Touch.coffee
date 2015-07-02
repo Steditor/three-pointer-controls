@@ -2,6 +2,8 @@
 
 setState = ->
 	switch @touchPoints
+		when @config.dolly.touchPoints
+			return @state = STATE.DOLLY if @config.dolly.enabled
 		when @config.orbit.touchPoints
 			return @state = STATE.ORBIT if @config.orbit.enabled
 
@@ -27,6 +29,11 @@ onPointerMove = (event) ->
 		return
 
 	switch @state
+		when STATE.DOLLY
+			@end.set event.clientX, event.clientY
+			@delta.subVectors @end, @start
+			@dolly.dollyBy @delta
+			@start.copy @end
 		when STATE.ORBIT
 			@end.set event.clientX, event.clientY
 			@delta.subVectors @end, @start
