@@ -6,7 +6,9 @@ module.exports =
 	dolly:
 		enabled: true
 		button: BUTTON.MIDDLE
-		touchPoints: 2
+		touchPoints:
+			min: 2
+			max: 2
 		scale: 1.0
 		scrollScale: 0.95
 		minDistance: 0
@@ -15,7 +17,9 @@ module.exports =
 	orbit:
 		enabled: true
 		button: BUTTON.LEFT
-		touchPoints: 1
+		touchPoints:
+			min: 1
+			max: 1
 		speed: 1.0
 		minYaw: -Infinity
 		maxYaw: Infinity
@@ -25,7 +29,9 @@ module.exports =
 	pan:
 		enabled: true
 		button: BUTTON.RIGHT
-		touchPoints: 3
+		touchPoints:
+			min: 3
+			max: 10
 		key:
 			left: KEY.LEFT
 			up: KEY.UP
