@@ -1,7 +1,7 @@
 {STATE} = require '../enums'
 
-inInterval = (value, {min, max}) ->
-	return min <= value <= max
+inInterval = (touchPoints, {min, max}) ->
+	return min <= Object.keys(touchPoints).length <= max
 
 setState = ->
 	if @config.pan.enabled and
@@ -17,44 +17,41 @@ setState = ->
 		return @state = STATE.NONE
 
 onPointerDown = (event) ->
-	@touchPoints ?= 0
-	@touchPoints++
+	@touchPoints ?= {}
+	@touchPoints[event.pointerId] ?= @start.clone()
+	@touchPoints[event.pointerId].set event.clientX, event.clientY
 
 	setState.call @
-
-	if @state is STATE.NONE
-		@touchPointerId = undefined
-	else
-		@touchPointerId = event.pointerId
-		@start.set event.clientX, event.clientY
 
 	@startInteraction event
 	return
 
 onPointerMove = (event) ->
-	unless @touchPointerId?
-		@start.set event.clientX, event.clientY
-		@touchPointerId = event.pointerId
-		return
-
-	return if event.pointerId isnt @touchPointerId
+	@start.copy @touchPoints[event.pointerId]
+	@touchPoints[event.pointerId].set event.clientX, event.clientY
+	@end.copy @touchPoints[event.pointerId]
 
 	switch @state
 		when STATE.PAN
-			@end.set event.clientX, event.clientY
+			return if String(event.pointerId) isnt Object.keys(@touchPoints)[0]
 			@delta.subVectors @end, @start
 			@pan.panBy @delta
-			@start.copy @end
+
 		when STATE.DOLLY
-			@end.set event.clientX, event.clientY
-			@delta.subVectors @end, @start
-			@dolly.dollyBy @delta
-			@start.copy @end
+			if String(event.pointerId) is Object.keys(@touchPoints)[0]
+				other = @touchPoints[Object.keys(@touchPoints)[1]]
+			else
+				other = @touchPoints[Object.keys(@touchPoints)[0]]
+
+			oldDistance = other.distanceTo @start
+			newDistance = other.distanceTo @end
+
+			@dolly.dollyBy y: oldDistance - newDistance
+
 		when STATE.ORBIT
-			@end.set event.clientX, event.clientY
+			return if String(event.pointerId) isnt Object.keys(@touchPoints)[0]
 			@delta.subVectors @end, @start
 			@orbit.orbitBy @delta
-			@start.copy @end
 		else
 			return
 
@@ -62,8 +59,7 @@ onPointerMove = (event) ->
 	return
 
 onPointerUp = (event) ->
-	@touchPoints--
-	@touchPointerId = undefined
+	delete @touchPoints[event.pointerId]
 
 	setState.call @
 
