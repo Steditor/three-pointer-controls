@@ -2,6 +2,8 @@
 
 setState = ->
 	switch @touchPoints
+		when @config.pan.touchPoints
+			return @state = STATE.PAN if @config.pan.enabled
 		when @config.dolly.touchPoints
 			return @state = STATE.DOLLY if @config.dolly.enabled
 		when @config.orbit.touchPoints
@@ -29,6 +31,11 @@ onPointerMove = (event) ->
 		return
 
 	switch @state
+		when STATE.PAN
+			@end.set event.clientX, event.clientY
+			@delta.subVectors @end, @start
+			@pan.panBy @delta
+			@start.copy @end
 		when STATE.DOLLY
 			@end.set event.clientX, event.clientY
 			@delta.subVectors @end, @start
