@@ -48,8 +48,15 @@ onPointerUp = (event) ->
 	@endInteraction event
 	return
 
+onMouseWheel = (event) ->
+	return unless @config.dolly.enabled and @config.dolly.mouseWheelEnabled
+
+	@dolly.scrollBy event.deltaY
+	@update()
+
 module.exports = {
 	onPointerDown
 	onPointerMove
 	onPointerUp
+	onMouseWheel
 }

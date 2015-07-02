@@ -5,6 +5,7 @@ module.exports =
 
 	dolly:
 		enabled: true
+		mouseWheelEnabled: true
 		button: BUTTON.MIDDLE
 		touchPoints:
 			min: 2

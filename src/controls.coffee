@@ -87,9 +87,10 @@ module.exports = (THREE) ->
 			return
 
 		onMouseWheel: (event) =>
+			return unless @config.enabled
 			preventDefault event
-			@dolly.scrollBy event.deltaY
-			@update()
+
+			Mouse.onMouseWheel.call @, event
 			return
 
 		startInteraction: (event) =>
