@@ -25,6 +25,7 @@ module.exports =
 	pan:
 		enabled: true
 		button: BUTTON.RIGHT
+		touchPoints: 3
 		key:
 			left: KEY.LEFT
 			up: KEY.UP
