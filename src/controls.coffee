@@ -9,6 +9,9 @@ Dolly = require './Dolly'
 Orbit = require './Orbit'
 Animation = require './animation/Animation'
 
+Mouse = require './devices/Mouse'
+Touch = require './devices/Touch'
+
 # internally, pointerControls works with +y as up vector
 UP = {x: 0, y: 1, z: 0}
 
@@ -49,71 +52,58 @@ module.exports = (THREE) ->
 			registerEventListeners @, domElement
 			return
 
+		getDeviceFor: (event) =>
+			switch event.pointerType
+				when 'touch'
+					return Touch
+				when 'mouse'
+					return Mouse
+				when 'pen'
+					# Try to handle pens like mice for the moment
+					return Mouse
+
 		onPointerDown: (event) =>
 			return unless @config.enabled
 			preventDefault event
 
-			switch event.buttons
-				when @config.pan.button
-					return unless @config.pan.enabled
-					@state = STATE.PAN
-					@start.set event.clientX, event.clientY
-				when @config.dolly.button
-					return unless @config.dolly.enabled
-					@state = STATE.DOLLY
-					@start.set event.clientX, event.clientY
-				when @config.orbit.button
-					return unless @config.orbit.enabled
-					@state = STATE.ORBIT
-					@start.set event.clientX, event.clientY
-				else
-					return
-
-			@animation.setStatus @config.animation.onInteraction
-			@element = event.target
-			document.addEventListener 'pointermove', @onPointerMove
-			document.addEventListener 'pointerup', @onPointerUp
+			Device = @getDeviceFor event
+			Device.onPointerDown.call @, event
 			return
 
 		onPointerMove: (event) =>
+			return unless @config.enabled
 			preventDefault event
 
-			switch @state
-				when STATE.PAN
-					@end.set event.clientX, event.clientY
-					@delta.subVectors @end, @start
-					@pan.panBy @delta
-					@start.copy @end
-				when STATE.DOLLY
-					@end.set event.clientX, event.clientY
-					@delta.subVectors @end, @start
-					@dolly.dollyBy @delta
-					@start.copy @end
-				when STATE.ORBIT
-					@end.set event.clientX, event.clientY
-					@delta.subVectors @end, @start
-					@orbit.orbitBy @delta
-					@start.copy @end
-				else
-					return
-
-			@animation.setStatus @config.animation.onInteraction
-			@update()
+			Device = @getDeviceFor event
+			Device.onPointerMove.call @, event
 			return
 
 		onPointerUp: (event) =>
+			return unless @config.enabled
 			preventDefault event
-			@animation.setStatus @config.animation.onInteraction
-			document.removeEventListener 'pointermove', @onPointerMove
-			document.removeEventListener 'pointerup', @onPointerUp
-			@element = undefined
-			@state = STATE.NONE
+
+			Device = @getDeviceFor event
+			Device.onPointerUp.call @, event
 			return
 
 		onMouseWheel: (event) =>
 			preventDefault event
 			@dolly.scrollBy event.deltaY
 			@update()
+			return
+
+		startInteraction: (event) =>
+			@animation.setStatus @config.animation.onInteraction
+			@element = event.target
+			document.addEventListener 'pointermove', @onPointerMove
+			document.addEventListener 'pointerup', @onPointerUp
+			return
+
+		endInteraction: (event) =>
+			@animation.setStatus @config.animation.afterInteraction
+			@element = undefined
+			document.removeEventListener 'pointermove', @onPointerMove
+			document.removeEventListener 'pointerup', @onPointerUp
 			return
 
 		setHome: ({target, position, up}) =>

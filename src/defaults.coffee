@@ -14,6 +14,7 @@ module.exports =
 	orbit:
 		enabled: true
 		button: BUTTON.LEFT
+		touch: 1
 		speed: 1.0
 		minYaw: -Infinity
 		maxYaw: Infinity
@@ -33,4 +34,5 @@ module.exports =
 	animation:
 		enabled: yes
 		onInteraction: ANIMATION.STOP
+		afterInteraction: ANIMATION.STOP
 		loop: yes

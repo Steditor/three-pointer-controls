@@ -22,6 +22,7 @@ addAxis = (scene, color, point2) ->
 	scene.add axis
 
 start = (gl, width, height) ->
+	gl.canvas.setAttribute 'touch-action', 'none'
 	renderer = new THREE.WebGLRenderer canvas: gl.canvas
 	renderer.setClearColor 0xffffff, 1.0
 
