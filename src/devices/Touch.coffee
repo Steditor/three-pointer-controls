@@ -1,15 +1,20 @@
 {STATE} = require '../enums'
 
-setState = ->
-	switch @touchPoints
-		when @config.pan.touchPoints
-			return @state = STATE.PAN if @config.pan.enabled
-		when @config.dolly.touchPoints
-			return @state = STATE.DOLLY if @config.dolly.enabled
-		when @config.orbit.touchPoints
-			return @state = STATE.ORBIT if @config.orbit.enabled
+inInterval = (value, {min, max}) ->
+	return min <= value <= max
 
-	return @state = STATE.NONE
+setState = ->
+	if @config.pan.enabled and
+	inInterval @touchPoints, @config.pan.touchPoints
+		return @state = STATE.PAN
+	else if @config.dolly.enabled and
+	inInterval @touchPoints, @config.dolly.touchPoints
+		return @state = STATE.DOLLY
+	else if @config.orbit.enabled and
+	inInterval @touchPoints, @config.orbit.touchPoints
+		return @state = STATE.ORBIT
+	else
+		return @state = STATE.NONE
 
 onPointerDown = (event) ->
 	@touchPoints ?= 0
