@@ -14,7 +14,7 @@ module.exports =
 	orbit:
 		enabled: true
 		button: BUTTON.LEFT
-		touch: 1
+		touchPoints: 1
 		speed: 1.0
 		minYaw: -Infinity
 		maxYaw: Infinity
