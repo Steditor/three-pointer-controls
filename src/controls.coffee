@@ -10,6 +10,7 @@ Orbit = require './Orbit'
 Animation = require './animation/Animation'
 
 Mouse = require './devices/Mouse'
+Touch = require './devices/Touch'
 
 # internally, pointerControls works with +y as up vector
 UP = {x: 0, y: 1, z: 0}
@@ -54,7 +55,7 @@ module.exports = (THREE) ->
 		getDeviceFor: (event) =>
 			switch event.pointerType
 				when 'touch'
-					return null
+					return Touch
 				when 'mouse'
 					return Mouse
 				when 'pen'
