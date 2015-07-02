@@ -49,7 +49,7 @@ onPointerUp = (event) ->
 	return
 
 onMouseWheel = (event) ->
-	return unless @config.dolly.enabled
+	return unless @config.dolly.enabled and @config.dolly.mouseWheelEnabled
 
 	@dolly.scrollBy event.deltaY
 	@update()
