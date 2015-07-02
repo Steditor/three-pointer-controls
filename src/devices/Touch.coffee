@@ -18,17 +18,21 @@ onPointerDown = (event) ->
 	setState.call @
 
 	if @state is STATE.NONE
-		@start.set undefined, undefined
+		@touchPointerId = undefined
 	else
+		@touchPointerId = event.pointerId
 		@start.set event.clientX, event.clientY
 
 	@startInteraction event
 	return
 
 onPointerMove = (event) ->
-	unless @start.x and @start.y
+	unless @touchPointerId?
 		@start.set event.clientX, event.clientY
+		@touchPointerId = event.pointerId
 		return
+
+	return if event.pointerId isnt @touchPointerId
 
 	switch @state
 		when STATE.PAN
@@ -54,10 +58,9 @@ onPointerMove = (event) ->
 
 onPointerUp = (event) ->
 	@touchPoints--
+	@touchPointerId = undefined
 
 	setState.call @
-
-	@start.set undefined, undefined
 
 	@endInteraction event if @state is STATE.NONE
 	return
