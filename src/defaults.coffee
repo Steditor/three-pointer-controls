@@ -33,4 +33,5 @@ module.exports =
 	animation:
 		enabled: yes
 		onInteraction: ANIMATION.STOP
+		afterInteraction: ANIMATION.STOP
 		loop: yes

@@ -40,11 +40,11 @@ onPointerMove = (event) ->
 		else
 			return
 
-	@animation.setStatus @config.animation.onInteraction
 	@update()
 	return
 
 onPointerUp = (event) ->
+	@state = STATE.NONE
 	@endInteraction event
 	return
 

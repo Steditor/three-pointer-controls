@@ -99,8 +99,7 @@ module.exports = (THREE) ->
 			return
 
 		endInteraction: (event) =>
-			@state = STATE.NONE
-			@animation.setStatus @config.animation.onInteraction
+			@animation.setStatus @config.animation.afterInteraction
 			@element = undefined
 			document.removeEventListener 'pointermove', @onPointerMove
 			document.removeEventListener 'pointerup', @onPointerUp
