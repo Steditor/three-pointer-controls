@@ -32,7 +32,7 @@ class Animation
 		@status = ANIMATION.PAUSE
 
 	stop: =>
-		@steps[@step].reset()
+		@steps[@step]?.reset()
 		@step = 0
 		@status = ANIMATION.STOP
 
@@ -60,7 +60,7 @@ class Animation
 
 	_runStep: (diff) =>
 		unless @steps[@step]?
-			if @controls.config.animation.loop
+			if @controls.config.animation.loop and @step > 0
 				@step = 0
 			else
 				@status = ANIMATION.DONE
