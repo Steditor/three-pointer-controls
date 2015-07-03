@@ -2,7 +2,7 @@
   "name": "three-pointer-controls",
   "description": "Navigate a three.js scene with pointer events",
   "license": "MIT",
-  "version": "0.5.1",
+  "version": "0.5.2",
   "main": "./lib/controls.js",
   "scripts": {
     "test": "npm run build && coffee -c ./test/test.coffee && beefy test/test.js",
