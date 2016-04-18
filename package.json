@@ -23,40 +23,23 @@
     "controls"
   ],
   "author": "Stefan Neubert",
-  "contributors": [
-    {
-      "name": "Adrian Sieber"
-    },
-    {
-      "name": "Arthur Silber"
-    },
-    {
-      "name": "Johannes Deselaers"
-    },
-    {
-      "name": "Stefan Neubert"
-    },
-    {
-      "name": "Yannis Kommana"
-    }
-  ],
   "bugs": {
-    "url": "https://github.com/brickify/three-pointer-controls/issues"
+    "url": "https://github.com/steditor/three-pointer-controls/issues"
   },
-  "homepage": "https://github.com/brickify/three-pointer-controls",
+  "homepage": "https://github.com/steditor/three-pointer-controls",
   "dependencies": {
-    "PEP": "git://github.com/brickify/PEP#0.2.4+dist",
     "clamp": "^1.0.1",
     "clone": "^1.0.2",
-    "wheel": "0.0.1"
+    "wheel": "0.0.4"
   },
   "devDependencies": {
     "beefy": "^2.1.5",
-    "browserify": "^10.1.1",
+    "browserify": "^13.0.0",
     "canvas-testbed": "^1.0.3",
     "coffee-script": "^1.9.1",
     "coffeelint": "^1.9.6",
     "coffeelint-newline-at-eof": "^0.4.1",
-    "three": "^0.71.0"
+    "pepjs": "^0.4.1",
+    "three": "^0.75.0"
   }
 }
