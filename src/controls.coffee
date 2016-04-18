@@ -1,5 +1,5 @@
 clone = require 'clone'
-addWheelListener = require 'wheel'
+addWheelListener = require('wheel').addWheelListener
 
 {BUTTON, KEY, STATE} = require './enums'
 defaults = require './defaults'

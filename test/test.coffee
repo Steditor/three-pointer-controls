@@ -1,5 +1,5 @@
 buildCanvasApp = require 'canvas-testbed'
-require 'PEP'
+require 'pepjs'
 THREE = require 'three'
 PointerControls = require('../')(THREE)
 
